@@ -115,6 +115,19 @@ def load(filename):
             f.close()
     return data
 
+def yield_lines(filename):
+    """Yield a generator that iterates over each line of a file.
+    """
+    try:
+        f = open(filename, 'rb')
+        __lock_shared(f)
+        for line in f:
+            yield line
+    finally:
+        if vars().has_key('f'):
+            __unlock(f)
+            f.close()
+
 def append(data, filename):
     """Add data to the end of a file.
     """
