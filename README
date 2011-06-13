@@ -1,0 +1,7 @@
+This module contains code to aid cross-platform (win32 and posix) development
+in python. In general, python's standard library is designed to be
+cross-platform, but there are several areas (file locking, inter-process
+communication, etc.) where it is lacking.
+
+To install this module, copy or symlink the cross_platform directory into
+your python path.
