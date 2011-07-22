@@ -1,6 +1,6 @@
 """Routines to aid in file operations.
 
-The file-locking code was adapted from Jonathan Feinberg's code
+The win32 file-locking code was adapted from Jonathan Feinberg's code
 in the Python Cookbook.
 """
 

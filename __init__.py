@@ -6,5 +6,4 @@ __all__ = [
     'files',
     'file_selector',
     'ipc',
-    'user',
     ]
