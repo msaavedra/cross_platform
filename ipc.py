@@ -6,7 +6,6 @@ for win32 systems.
 
 import os
 import sys
-import thread
 import time
 import cPickle as pickle
 
@@ -71,7 +70,7 @@ if os.name == 'posix':
             conn.setblocking(0)
             conn.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
             connection = Connection(conn)
-            thread.start_new_thread(handler, (connection,))
+            handler(connection)
     
     def connect(filename, timeout=10):
         """Make a new open connection object to an IPC server.
@@ -205,7 +204,7 @@ elif sys.platform == 'win32' and os.environ.has_key('APPDATA'):
             connection = Connection(pipe)
             exit_code = ConnectNamedPipe(pipe, None)
             if exit_code == 0:
-                thread.start_new_thread(handler, (connection,))
+                handler(connection)
             else:
                 CloseHandle(pipe)
                 msg = 'Error %s connecting to named pipe.' % exit_code
