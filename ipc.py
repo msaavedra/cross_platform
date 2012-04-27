@@ -9,9 +9,6 @@ import sys
 import time
 import cPickle as pickle
 
-BUFFER_SIZE = 4096
-TIMEOUT = 30 #seconds
-
 class Error(Exception): pass
 
 class TimeoutError(Error): pass
@@ -179,6 +176,9 @@ elif sys.platform == 'win32' and os.environ.has_key('APPDATA'):
     from winerror import ERROR_MORE_DATA
     
     FILE_FLAG_FIRST_PIPE_INSTANCE = 0x00080000
+    BUFFER_SIZE = 4096
+    TIMEOUT = 30000 # milliseconds
+    
     
     def listen(filename, handler):
         """Begin listening on the specified named pipe file.
@@ -195,7 +195,7 @@ elif sys.platform == 'win32' and os.environ.has_key('APPDATA'):
             PIPE_UNLIMITED_INSTANCES,
             BUFFER_SIZE,
             BUFFER_SIZE,
-            TIMEOUT * 1000,
+            TIMEOUT,
             None
             )
         if pipe == INVALID_HANDLE_VALUE:
@@ -217,13 +217,13 @@ elif sys.platform == 'win32' and os.environ.has_key('APPDATA'):
                 PIPE_UNLIMITED_INSTANCES,
                 BUFFER_SIZE,
                 BUFFER_SIZE,
-                TIMEOUT * 1000,
+                TIMEOUT,
                 None
                 )
             if pipe == INVALID_HANDLE_VALUE:
                 raise Error('Error creating communication file.')
         
-    def connect(filename):
+    def connect(filename, timeout=10):
         """Make a new open connection object to an IPC server.
         
         This is a client-side factory function for the Connection class.
@@ -237,7 +237,7 @@ elif sys.platform == 'win32' and os.environ.has_key('APPDATA'):
             if pipe != INVALID_HANDLE_VALUE:
                 break
             
-            WaitNamedPipe(filename, TIMEOUT * 1000)
+            WaitNamedPipe(filename, timeout * 1000)
         return Connection(pipe)
     
     class Connection(_IterableConnection):
